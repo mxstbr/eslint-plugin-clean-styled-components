@@ -24,14 +24,40 @@ var ruleTester = new RuleTester({
 ruleTester.run("single-component-per-file", rule, {
     valid: [
         'import styled from "styled-components"; const Button = styled.button``; export default Button;',
+        'import styled from "styled-components"; const Button = styled("button")``; export default Button;',
         'import styled from "styled-components"; const Button = styled(Button2)``; export default Button;',
         'import styled from "styled-components"; export default styled.button``;',
+        'import styled from "styled-components"; export default styled.button({ });',
         'import styled, { css } from "styled-components"; const Button = styled.button``; export default Button;',
         'import styled from "somewhere-else"; const Button = styled.button``; const Button2 = styled.button``',
     ],
     invalid: [
         {
             code: 'import styled from "styled-components"; const Button = styled.button``; const Button2 = styled.button``',
+            errors: [{
+                message: "More than one styled component defined",
+            }]
+        },
+        {
+            code: 'import styled from "styled-components"; const Button = styled("button")``; const Button2 = styled("button")``',
+            errors: [{
+                message: "More than one styled component defined",
+            }]
+        },
+        {
+            code: 'import styled from "styled-components"; const Button = styled("button")``; const Button2 = styled.button``',
+            errors: [{
+                message: "More than one styled component defined",
+            }]
+        },
+        {
+            code: 'import styled from "styled-components"; const Button = styled.button({}); const Button2 = styled.button({})',
+            errors: [{
+                message: "More than one styled component defined",
+            }]
+        },
+        {
+            code: 'import styled from "styled-components"; const Button = styled.button({}); const Button2 = styled.button``',
             errors: [{
                 message: "More than one styled component defined",
             }]
@@ -81,6 +107,13 @@ ruleTester.run("single-component-per-file", rule, {
             errors: [{
                 message: "styled component defined in the same file as a React component",
                 type: "TaggedTemplateExpression"
+            }]
+        },
+        {
+            code: 'import React from "react"; import styled from "styled-components"; const Button = styled.button({ }); const Bla = () => <div />',
+            errors: [{
+                message: "styled component defined in the same file as a React component",
+                type: "CallExpression"
             }]
         },
         {
