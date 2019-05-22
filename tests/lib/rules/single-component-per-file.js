@@ -65,14 +65,36 @@ ruleTester.run("single-component-per-file", rule, {
         {
             code: 'import React from "react"; import styled from "styled-components"; const Button = styled.button``; class Bla extends React.Component { render() { return <div /> } }',
             errors: [{
-                message: "React component defined in the same file as a styled component",
+                message: "styled component defined in the same file as a React component",
+                type: "TaggedTemplateExpression"
+            }]
+        },
+        {
+            code: 'import React from "react"; import styled from "styled-components"; const Bla = () => <div />; const Button = styled.button``;',
+            errors: [{
+                message: "styled component defined in the same file as a React component",
+                type: "TaggedTemplateExpression"
             }]
         },
         {
             code: 'import React from "react"; import styled from "styled-components"; const Button = styled.button``; const Bla = () => <div />',
             errors: [{
-                message: "React component defined in the same file as a styled component",
+                message: "styled component defined in the same file as a React component",
+                type: "TaggedTemplateExpression"
             }]
         },
+        {
+            code: 'import React from "react"; import styled from "styled-components"; const Button = styled.button``; const Button2 = styled.button``; const Bla = () => <div />',
+            errors: [{
+                message: "styled component defined in the same file as a React component",
+                type: "TaggedTemplateExpression"
+            }, {
+                message: "More than one styled component defined",
+                type: "TaggedTemplateExpression"
+            }, {
+                message: "styled component defined in the same file as a React component",
+                type: "TaggedTemplateExpression"
+            }]
+        },        
     ]
 });
