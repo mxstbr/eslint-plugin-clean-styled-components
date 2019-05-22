@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-clean-styled-components",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Lint your styled-components code to be clean",
   "keywords": [
     "eslint",
