@@ -7,13 +7,13 @@ Lint your styled-components code to be clean
 You'll first need to install [ESLint](http://eslint.org):
 
 ```
-$ npm i eslint --save-dev
+$ npm install eslint --dev
 ```
 
 Next, install `eslint-plugin-clean-styled-components`:
 
 ```
-$ npm install eslint-plugin-clean-styled-components --save-dev
+$ npm install eslint-plugin-clean-styled-components --dev
 ```
 
 **Note:** If you installed ESLint globally (using the `-g` flag) then you must also install `eslint-plugin-clean-styled-components` globally.
@@ -30,22 +30,30 @@ Add `clean-styled-components` to the plugins section of your `.eslintrc` configu
 }
 ```
 
-
 Then configure the rules you want to use under the rules section.
 
 ```json
 {
+    "plugins": [
+        "clean-styled-components"
+    ],
     "rules": {
-        "clean-styled-components/rule-name": 2
+        "clean-styled-components/single-component-per-file": 2
     }
+}
+```
+
+If you want to enable all recommended rules, extend the `eslint:recommended` config:
+
+```json
+{
+    "plugins": [
+        "clean-styled-components"
+    ],
+    "extends": ["eslint:recommended"]
 }
 ```
 
 ## Supported Rules
 
 * `single-component-per-file`: enforce only having a single styled component per source file
-
-
-
-
-
