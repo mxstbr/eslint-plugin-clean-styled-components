@@ -18,7 +18,7 @@ var rule = require("../../../lib/rules/single-component-per-file"),
 //------------------------------------------------------------------------------
 
 var ruleTester = new RuleTester({
-    parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    parserOptions: { ecmaVersion: 2015, sourceType: 'module', ecmaFeatures: { jsx: true } },
 });
 
 ruleTester.run("single-component-per-file", rule, {
@@ -34,53 +34,45 @@ ruleTester.run("single-component-per-file", rule, {
             code: 'import styled from "styled-components"; const Button = styled.button``; const Button2 = styled.button``',
             errors: [{
                 message: "More than one styled component defined",
-                type: "TaggedTemplateExpression"
             }]
         },
         {
             code: 'import bugger from "styled-components"; const Button = bugger.button``; const Button2 = bugger.button``',
             errors: [{
                 message: "More than one styled component defined",
-                type: "TaggedTemplateExpression"
             }]
         },
         {
             code: 'import styled from "styled-components"; const Button = styled.button``; const Button2 = styled.button``; const Button3 = styled.button``',
             errors: [{
                 message: "More than one styled component defined",
-                type: "TaggedTemplateExpression"
             }, {
                 message: "More than one styled component defined",
-                type: "TaggedTemplateExpression"
             }]
         },
         {
             code: 'import styled from "styled-components"; const Button = styled.button``; const Button2 = styled(Button)``',
             errors: [{
                 message: "More than one styled component defined",
-                type: "TaggedTemplateExpression"
             }]
         },
         {
             code: 'import styled from "styled-components"; const Button = styled.button``; export default styled.button``',
             errors: [{
                 message: "More than one styled component defined",
-                type: "TaggedTemplateExpression"
             }]
         },
-        // {
-        //     code: 'import styled from "styled-components"; const Button = styled.button``; class Bla extends React.Component { render() {} }',
-        //     errors: [{
-        //         message: "styled component defined in the same file as another React component",
-        //         type: "TaggedTemplateExpression"
-        //     }]
-        // },
-        // {
-        //     code: 'import styled from "styled-components"; const Button = styled.button``; const Bla = () => <div />',
-        //     errors: [{
-        //         message: "styled component defined in the same file as another React component",
-        //         type: "TaggedTemplateExpression"
-        //     }]
-        // },
+        {
+            code: 'import React from "react"; import styled from "styled-components"; const Button = styled.button``; class Bla extends React.Component { render() { return <div /> } }',
+            errors: [{
+                message: "React component defined in the same file as a styled component",
+            }]
+        },
+        {
+            code: 'import React from "react"; import styled from "styled-components"; const Button = styled.button``; const Bla = () => <div />',
+            errors: [{
+                message: "React component defined in the same file as a styled component",
+            }]
+        },
     ]
 });
